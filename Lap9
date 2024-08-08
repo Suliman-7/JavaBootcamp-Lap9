@@ -1,0 +1,138 @@
+create database cinema  ;
+
+create table MovieCategory (
+    id int primary key ,
+    name varchar(20) ,
+    rate varchar(5)
+);
+
+insert into MovieCategory values (112 , 'action' , 'PG');
+insert into MovieCategory values (122 , 'comedy' , 'G');
+insert into MovieCategory values (121 , 'drama' , 'R15');
+insert into MovieCategory values (211 , 'horror' , 'R18');
+insert into MovieCategory values (221 , 'fantasy' , 'R12');
+
+update MovieCategory set rate='PG' where id=122;
+
+delete from MovieCategory where name='comedy' ;
+
+select * from MovieCategory ;
+
+
+create table Movie (
+    id int primary key ,
+    name varchar(20) ,
+    duration int ,
+    desctipsion varchar(100) ,
+    actor varchar(20) ,
+    categoryId int ,
+    foreign key (categoryId) references MovieCategory(id)
+);
+
+insert into Movie values (234,'mission impossible',180,'mission impossible is movie by actor tom cruise','christopher',112);
+insert into Movie values (233,'IT',180,'IT is horror movie his story is munster killing people','Mark',211);
+insert into Movie values (242,'Django',120,'Django is movie its story about the actor leonardo decaprio','Nolan',112);
+insert into Movie values (243,'Fight club',120,'fight club is movie its story about the fight club and its role','Nolan',121);
+insert into Movie values (244,'Lord of the Rings',120,'Lord of the rings is movie about the lord of the ring','steeve',221);
+
+update Movie set actor = 'marten' where id=244;
+
+delete from Movie where id=243 ;
+
+select * from Movie ;
+
+
+create table Gate (
+    id int primary key ,
+    movieId int ,
+    foreign key (movieId) references Movie(id) ,
+    capacity int check ( capacity > 10 and capacity < 100 ) ,
+    gateType varchar(10) check ( gateType='standard' or gateType='dolby' or gateType='screenX' )
+);
+
+
+
+insert into Gate values (456, 234, 80, 'standard') ;
+insert into Gate values (465, 233, 90, 'screenX') ;
+insert into Gate values (455, 242, 60, 'dolby') ;
+insert into Gate values (466, 243, 90, 'standard') ;
+insert into Gate values (464, 244, 80, 'screenX') ;
+
+update Gate set capacity=70 where id=455 ;
+
+delete from Gate where id=464;
+
+
+select * from Gate ;
+
+
+
+create table Ticket (
+    id int primary key ,
+    price int ,
+    date datetime ,
+    movieId int ,
+    foreign key (movieId) references Movie(id)
+
+);
+
+insert into Ticket values (567,60,'2024/07/06',234);
+insert into Ticket values (576,80,'2024/04/12',233);
+insert into Ticket values (577,40,'2024/03/04',243);
+insert into Ticket values (566,50,'2024/11/20',244);
+insert into Ticket values (575,100,'2024/07/30',242);
+
+update Ticket set date='2024/08/01' where id=575 ;
+
+delete from Ticket where id=566;
+
+select * from Ticket ;
+
+
+create table User (
+    id int primary key ,
+    name varchar(20) ,
+    age int check ( age>12 ),
+    email varchar(20) unique ,
+    balance int default 0
+);
+
+
+insert into User values (678,'mohammed',20,'moha@gmail.com',0);
+insert into User values (687,'khalid',26,'khalid@gmail.com',100);
+insert into User values (677,'saad',30,'saad@gmail.com',0);
+insert into User values (688,'faisal',17,'faisal@gmail.com',50);
+insert into User values (686,'sarah',20,'sara@gmail.com',70);
+
+update User set balance=150 where id=677 ;
+
+delete from User where id=678 ;
+
+
+select * from User ;
+
+
+
+create table Booking(
+    userId int ,
+    foreign key (userId) references User(id) ,
+    ticketId int ,
+    foreign key (ticketId) references Ticket(id) ,
+    paymentType varchar(20)
+);
+
+insert into Booking values  (678,567,'cach');
+insert into Booking values  (687,576,'card');
+insert into Booking values  (677,577,'visa');
+insert into Booking values  (688,566,'cach');
+insert into Booking values  (686,575,'cach');
+
+update Booking set paymentType='mastercard' where userId=688 ;
+
+delete from Booking where ticketId=567;
+
+
+select * from Booking ;
+
+
+
